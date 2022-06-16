@@ -1,6 +1,8 @@
 package io.fouri.wawsup.dao;
 
 import io.fouri.wawsup.domain.User;
+import io.fouri.wawsup.errors.ResourceNotFoundException;
+import io.fouri.wawsup.errors.UsernameAlreadyUsedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +28,14 @@ public class DynamoDao {
         userList = new ArrayList<>();
     }
 
-    public boolean saveUser(User user) {
-        userList.add(user);
-        log.debug("Added user {}", user);
-        return true;
+    public boolean createUser(User user) {
+        if (findUser(user.getUserName()) == -1) {
+            userList.add(user);
+            log.debug("Added user {}", user);
+            return true;
+        } else {
+           return false;
+        }
     }
 
     private int findUser(String userName) {
@@ -70,9 +76,10 @@ public class DynamoDao {
             userList.add(user);
             log.debug("Updated User {} ", user);
             return true;
+        } else {
+            log.debug("Could not find user to update: " + user.getUserName());
+            return false;
         }
-        log.debug("Could not find user to update: " + user.getUserName());
-        return false;
     }
 
 }

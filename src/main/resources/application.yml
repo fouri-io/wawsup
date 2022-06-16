@@ -26,3 +26,6 @@ spring:
       dev:
         - dev
         - api-docs
+server:
+  error:
+    include-message: always
