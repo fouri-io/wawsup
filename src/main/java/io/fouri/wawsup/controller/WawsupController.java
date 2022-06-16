@@ -4,6 +4,11 @@ import io.fouri.wawsup.domain.User;
 import io.fouri.wawsup.errors.ResourceNotFoundException;
 import io.fouri.wawsup.errors.UsernameAlreadyUsedException;
 import io.fouri.wawsup.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +22,6 @@ public class WawsupController {
     @Autowired
     private UserService userService;
 
-    /**
-     * {@code GET  /} : API Running response
-     */
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public String index() {
@@ -28,9 +30,6 @@ public class WawsupController {
         return "[/] WAWSUUUUUUUUUUPPPPP!!!!!!";
     }
 
-    /**
-     * {@code GET  /ping} : simple health-check response
-     */
     @GetMapping("/ping")
     @ResponseStatus(HttpStatus.OK)
     public String ping() {
@@ -38,12 +37,7 @@ public class WawsupController {
         return "pong";
     }
 
-    /**
-     * {@code GET  /user} : Retrieve a single user
-     *
-     * @param userName unique username for a given user
-     * @throws ResponseStatusException {@code 404 (Not Found)} if user cannot be found.
-     */
+    @Operation(summary = "Get User by username")
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public User getUser(@RequestParam(value = "userName") String userName) {
@@ -51,19 +45,13 @@ public class WawsupController {
         try {
             return userService.getUser(userName);
         } catch (ResourceNotFoundException e) {
-            log.error("[/user/{id}:getUser] User Not found: " + userName);
+            log.error("[/user/{id}:getUser] User not found: " + userName);
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "User not found: " + userName, e);
         }
     }
 
-    /**
-     * {@code POST  /user} : Create a new user
-     *
-     * @param newUser New User information - User POJO
-     * @throws ResponseStatusException {@code 400 (Bad Request)} if username is already used
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user could not be created
-     */
+    @Operation(summary = "Create User")
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     public void createUser(@RequestBody User newUser) {
@@ -76,7 +64,7 @@ public class WawsupController {
                     HttpStatus.BAD_REQUEST, "Username already exists, not created: " + newUser.getUserName(), e);
         }
     }
-
+    @Operation(summary = "Update User")
     @PutMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@RequestBody User existingUser) {
@@ -89,6 +77,7 @@ public class WawsupController {
                     HttpStatus.NOT_FOUND, "Could not update user -- Not found: " + existingUser.getUserName(), e);
         }
     }
+    @Operation(summary = "Delete User by username")
     @DeleteMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@RequestParam(value = "userName") String userName) {

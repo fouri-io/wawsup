@@ -48,10 +48,9 @@
 
 		<!-- Swagger / OpenAPI -->
 		<dependency>
-			<groupId>org.openapitools</groupId>
-			<artifactId>openapi-generator-maven-plugin</artifactId>
-			<version>6.0.0</version>
-			<scope>provided</scope>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.9</version>
 		</dependency>
 
 		<!-- Testing -->

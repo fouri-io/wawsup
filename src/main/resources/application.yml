@@ -29,3 +29,7 @@ spring:
 server:
   error:
     include-message: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
