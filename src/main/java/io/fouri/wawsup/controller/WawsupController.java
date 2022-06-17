@@ -34,6 +34,7 @@ public class WawsupController {
     @ResponseStatus(HttpStatus.OK)
     public String ping() {
         log.info("[/ping] Playing ping pong");
+        userService.testDatabase();
         return "pong";
     }
 

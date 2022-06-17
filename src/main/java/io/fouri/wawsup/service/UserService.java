@@ -1,18 +1,16 @@
 package io.fouri.wawsup.service;
 
 import io.fouri.wawsup.dao.DynamoDao;
+import io.fouri.wawsup.dao.MemoryDao;
 import io.fouri.wawsup.domain.User;
 import io.fouri.wawsup.errors.ResourceNotFoundException;
 import io.fouri.wawsup.errors.UsernameAlreadyUsedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * Service class for managing users.  Simple implementation, should have more validation
@@ -21,9 +19,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserService {
-
     @Autowired
     private DynamoDao dao;
+    //private MemoryDao dao;
 
     public User getUser(String userName) throws ResourceNotFoundException {
         return dao.getUser(userName).orElseThrow(ResourceNotFoundException::new);
@@ -55,6 +53,10 @@ public class UserService {
         if(!dao.createUser(newUser)) {
             throw new UsernameAlreadyUsedException();
         }
+    }
+
+    public void testDatabase() {
+        dao.testDatabase();
     }
 
 }

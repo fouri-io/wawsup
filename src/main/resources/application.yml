@@ -33,3 +33,18 @@ server:
 springdoc:
   api-docs:
     path: /api-docs
+
+# Used as a basis for in memory tests, use local profile (mvn spring-boot:run -Dspring-boot.run.profiles=local)
+# for running against Local Dynamo and dev profile for running against aws hosted DynamoDB
+database:
+  dao: MemoryDao
+
+amazon:
+  access:
+    key: bk25d
+    secretkey: bkwt8i
+  region: localhost
+dynamodb:
+  endpoint:
+    url: http://localhost:8000/
+  table-name: wawsup
